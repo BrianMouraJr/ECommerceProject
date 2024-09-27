@@ -6,6 +6,23 @@ const { Category, Product } = require('../../models');
 router.get('/', (req, res) => {
   // find all categories
   // be sure to include its associated Products
+  try {
+    // Find all categories and include associated products
+    const categories = await Category.findAll({
+      include: [
+        {
+          model: Product, // Assuming Category has a relation with Product
+          as: 'products'  // Ensure you are using the right alias if applicable
+        }
+      ]
+    });
+
+    // Return the found categories and their products
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to retrieve categories' });
+  }
 });
 
 router.get('/:id', (req, res) => {
